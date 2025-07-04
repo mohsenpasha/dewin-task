@@ -2,17 +2,23 @@
 import { useState } from "react";
 import CInput from "./components/Input";
 import { CButton } from "./components/Button";
+import { ErrorPopup } from "./components/ErrorPopup";
 
 export default function Home() {
   const [username,setUsername] = useState('')
   const [password,setPassword] = useState('')
+  const [popupToggle,setPopupToggle] = useState(false)
   function submitHandler(){
     if(username.length <= 12 && password.length <= 12){
       console.log('submited')
       // we have submit information and we can use it here
     }
+    else{
+      setPopupToggle(true)
+    }
   }
   return (
+    <>
     <div className="w-full h-[100vh] bg-[#8007f0] flex items-center justify-center">
       <div className="min-w-72 bg-white rounded-lg p-4">
         <div className="text-center font-bold text-[#7352eb]">
@@ -26,5 +32,9 @@ export default function Home() {
         </div>
       </div>
     </div>
+      {popupToggle && 
+        <ErrorPopup closePopup={()=>setPopupToggle(false)}/>
+      }
+    </>
   );
 }
