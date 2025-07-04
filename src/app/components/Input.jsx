@@ -1,8 +1,22 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { IconEye, IconNoEye } from "./Icons";
 
 export default function CInput({type,value,setValue}){
+    const [isValid,setIsvalid] = useState(true)
+    const [isVisible,setIsVisible] = useState(false)
+    useEffect(()=>{
+        if(value.length > 12){
+            setIsvalid(false)
+        }
+        else{
+            setIsvalid(true)
+        }
+    },[value])
+    function togglePasswordVisibility(){
+        setIsVisible(!isVisible)
+    }
     return(
-        // <div className="border-[1px] border-[#ccc] rounded-sm p-2">
         <div className="w-full text-right">
             <div className="flex justify-between flex-row-reverse">
                 <span className="text-[#8c8c8c] text-sm font-bold">
@@ -12,7 +26,19 @@ export default function CInput({type,value,setValue}){
                     <Link className="text-xs font-bold text-[#7352eb] underline" href={'forget-password'}>رمز عبور خود را فراموش کردم</Link>
                 }
             </div>
-            <input className="w-full rounded-lg bg-[#f7f6fb] p-2 mt-2 outline-none" type={type} value={value} onChange={(event)=>setValue(event.target.value)} />
+            <div className="relative mt-2">
+                <input className={`w-full rounded-lg bg-[#f7f6fb] p-2 outline-none border-[1px] transition-all text-right ${isValid ? 'border-transparent' : ' border-red-600'}`} type={isVisible ? 'text' : type} value={value} onChange={(event)=>setValue(event.target.value)} />
+                {
+                    type == 'password' &&
+                    <span onClick={togglePasswordVisibility} className="absolute top-1/2 -translate-y-1/2 left-2 cursor-pointer">
+                        {isVisible ?
+                            <IconNoEye/>
+                            :
+                            <IconEye/>
+                        }
+                </span>
+                }
+            </div>
         </div>
     )
 }
